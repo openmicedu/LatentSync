@@ -6,12 +6,13 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     ln -sf /usr/bin/python3 /usr/bin/python && \
     ln -sf /usr/bin/pip3 /usr/bin/pip
+
 WORKDIR /app
+COPY checkpoints/ checkpoints/
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 
 # copy source and (optionally) checkpoints
 COPY . .
-# COPY checkpoints/ checkpoints/
 
 CMD ["python", "-u", "handler.py"]

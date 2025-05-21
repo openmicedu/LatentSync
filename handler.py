@@ -1,5 +1,5 @@
-from main import handle_job
 import runpod, uuid, subprocess, shutil, pathlib
+from main import handle_job
 
 TMP = pathlib.Path("/tmp")
 
@@ -25,7 +25,7 @@ def handler(event):
             "video_in": str(v_local),
             "audio_in": str(a_local),
             "out":      str(o_local),
-            "steps":    job.get("steps", 30)
+            "inference_steps":    job.get("steps", 20)
         })
 
         upload(o_local, job["out"])
