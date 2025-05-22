@@ -1,4 +1,4 @@
-FROM nvidia/cuda:12.4.0-runtime-ubuntu22.04
+FROM nvidia/cuda:12.8.0-runtime-ubuntu22.04
 
 RUN apt-get update && apt-get install -y ffmpeg curl libgl1-mesa-glx libglib2.0-0        && rm -rf /var/lib/apt/lists/*
 RUN apt-get update && \
