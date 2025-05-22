@@ -27,6 +27,7 @@ async def process_request(job: dict):
     RunPod passes {"id": "...", "input": {...}}.
     We do all blocking work in a thread to keep the event-loop free.
     """
+    print(f"processing {job.get('id')}")
     job_input = job["input"]
     work = TMP / uuid.uuid4().hex
     work.mkdir(exist_ok=True)
@@ -57,7 +58,8 @@ def adjust_concurrency(current: int) -> int:
     Keep at most MAX_CONCURRENCY requests in flight.
     You can add logic here (GPU util, queue backlog, etc.).
     """
-    return min(MAX_CONCURRENCY, max(1, current))
+    print("setting concurrency to 3")
+    return 3
 
 
 # ---------- start the worker ------------------------------------------------
