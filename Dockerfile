@@ -18,24 +18,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 
 COPY . .
-RUN pip install flask google-cloud-storage
+RUN pip install fastapi==0.115.12 uvicorn[standard]==0.34.2 python-multipart==0.0.20
+RUN mkdir -p /app/data/jobs /app/data/logs /app/checkpoints/whisper
 
-RUN apt-get update && apt-get install -y \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    gnupg \
-    lsb-release \
- && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" \
-    | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
- && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg \
-    | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg \
- && apt-get update && apt-get install -y google-cloud-sdk \
- && apt-get clean && rm -rf /var/lib/apt/lists/*
- 
-ENTRYPOINT ["/bin/bash","-c", "\
-  if [ ! -f /app/checkpoints/latentsync_unet.pt ]; then \
-     mkdir -p /app/checkpoints && \
-     gsutil -q cp -r gs://${PROJECT_ID}-latentsync-stage-latentsync-weights/checkpoints /app/ ; \
-  fi && \
-  python main.py \"$@\" "]
+
+ENV DATA_DIR=/app/data
+ENV WEIGHTS_DIR=/app/checkpoints
+ENV CONFIG_PATH=/app/configs/unet/stage2.yaml
+ENV PORT=8080
+EXPOSE 8080
+CMD ["python", "main.py"]
