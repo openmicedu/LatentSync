@@ -8,7 +8,7 @@ import shutil
 import runpod                     # RunPod serverless SDK
 from main import handle_job       # your existing LatentSync wrapper
 
-MAX_CONCURRENCY = 2               # how many requests per worker
+MAX_CONCURRENCY = 1               # how many requests per worker
 
 # ──────────────────────────────────────────────────────────────
 # Helper functions (run in background threads)
