@@ -52,7 +52,8 @@ async def process_request(job: dict):
                 "video_in":      str(v_local),
                 "audio_in":      str(a_local),
                 "out":           str(o_local),
-                "inference_steps": inp.get("steps", 20)
+                "inference_steps": inp.get("steps", 20),
+                "guidance_scale": inp.get("guidance_scale", 2.0)
             }
         )
 
