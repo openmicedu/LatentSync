@@ -7,8 +7,11 @@ RUN apt-get update && \
     ln -sf /usr/bin/python3 /usr/bin/python && \
     ln -sf /usr/bin/pip3 /usr/bin/pip
 
-WORKDIR /app
-COPY checkpoints/ checkpoints/
+WORKDIR /app/checkpoints
+RUN wget -O latentsync_unet.pt "https://huggingface.co/ByteDance/LatentSync-1.6/resolve/main/latentsync_unet.pt"
+RUN wget -O stable_syncnet.pt "https://huggingface.co/ByteDance/LatentSync-1.6/resolve/main/stable_syncnet.pt"
+RUN wget -O whisper/tiny.pt "https://huggingface.co/ByteDance/LatentSync-1.6/resolve/main/whisper/tiny.pt"
+
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
