@@ -6,7 +6,7 @@ ENV CMAKE_BUILD_PARALLEL_LEVEL=8
 
 # ---- system deps ----------------------------------------------------------
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        python3 python3-pip python3-dev \        # <-- headers for Python.h
+        python3 python3-pip python3-dev \       
         build-essential \
         git cmake ninja-build \
         libopenblas-dev liblapack-dev libopencv-dev \
