@@ -1,8 +1,7 @@
 FROM nvidia/cuda:12.4.0-runtime-ubuntu22.04
 # Prevents prompts from packages asking for user input during installation
 ENV DEBIAN_FRONTEND=noninteractive
-# Prefer binary wheels over source distributions for faster pip installations
-ENV PIP_PREFER_BINARY=1
+
 # Ensures output from python is printed immediately to the terminal without buffering
 ENV PYTHONUNBUFFERED=1
 # Speed up some cmake builds
