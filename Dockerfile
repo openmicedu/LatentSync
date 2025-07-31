@@ -16,10 +16,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && ln -sf /usr/bin/pip3   /usr/bin/pip
 
 # --------------------------------------------------------------------------
-WORKDIR /app
-COPY requirements.txt .
-RUN python -m pip install --upgrade pip         \
- && python -m pip install --no-cache-dir -r requirements.txt
 
 WORKDIR /app/checkpoints
 RUN mkdir -p whisper && \
@@ -29,6 +25,14 @@ RUN mkdir -p whisper && \
         https://huggingface.co/ByteDance/LatentSync-1.6/resolve/main/stable_syncnet.pt && \
     wget -q --show-progress -O whisper/tiny.pt \
         https://huggingface.co/ByteDance/LatentSync-1.6/resolve/main/whisper/tiny.pt
+
+
+WORKDIR /app
+COPY requirements.txt .
+RUN python -m pip install --upgrade pip         \
+ && python -m pip install --no-cache-dir -r requirements.txt
+
+
 
 # copy source and (optionally) checkpoints
 COPY . .
