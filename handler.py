@@ -53,7 +53,8 @@ async def process_request(job: dict):
                 "audio_in":      str(a_local),
                 "out":           str(o_local),
                 "inference_steps": inp.get("steps", 20),
-                "guidance_scale": inp.get("guidance_scale", 2.0)
+                "guidance_scale": inp.get("guidance_scale", 2.0),
+                "seed": inp.get("seed", 0)
             }
         )
 
