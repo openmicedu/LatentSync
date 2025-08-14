@@ -1,6 +1,6 @@
 build:
   gpu: true
-  cuda: "12.1"
+  cuda: "12.6"
   system_packages:
     - ffmpeg
     - libgl1
