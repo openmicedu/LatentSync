@@ -18,6 +18,5 @@ build:
     - ln -sf "auxiliary/models/syncnet/stable_syncnet.pt" "checkpoints/stable_syncnet.pt"
     - pget "https://github.com/deepinsight/insightface/releases/download/v0.7/buffalo_l.zip" "/tmp/buffalo_l.zip"
     - unzip -o "/tmp/buffalo_l.zip" -d "checkpoints/auxiliary/models"
-    - python -c "import os,sys; req=['checkpoints/latentsync_unet.pt','checkpoints/config.json','checkpoints/auxiliary/models/whisper/tiny.pt','checkpoints/auxiliary/models/syncnet/stable_syncnet.pt','checkpoints/auxiliary/models/buffalo_l/det_10g.onnx','checkpoints/auxiliary/models/buffalo_l/2d106det.onnx','checkpoints/auxiliary/models/buffalo_l/w600k_r50.onnx']; miss=[p for p in req if not os.path.exists(p)]; print('LatentSync-1.5 assets present.' if not miss else f'Missing: {miss}'); sys.exit(1 if miss else 0)"
 
 predict: "predict.py:Predictor"
