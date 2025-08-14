@@ -5,13 +5,57 @@ build:
   gpu: true
   cuda: "12.1"
   system_packages:
-    - "ffmpeg"
-    - "libgl1"
+    - ffmpeg
+    - libgl1
+    - libglib2.0-0   
+    - unzip          
   python_version: "3.10.13"
   python_requirements: requirements.txt
 
   run:
+    # fast, resumable downloads
     - curl -o /usr/local/bin/pget -L "https://github.com/replicate/pget/releases/download/v0.10.2/pget_linux_x86_64" && chmod +x /usr/local/bin/pget
+
+    # --- LatentSync 1.5 weights & aux assets ---
+    - mkdir -p checkpoints/auxiliary/models/whisper
+    - mkdir -p checkpoints/auxiliary/models/syncnet
+    - mkdir -p checkpoints/auxiliary/models/buffalo_l
+
+    # Core 1.5 files
+    - pget "https://huggingface.co/ByteDance/LatentSync-1.5/resolve/main/latentsync_unet.pt" "checkpoints/latentsync_unet.pt"
+    - pget "https://huggingface.co/ByteDance/LatentSync-1.5/resolve/main/config.json" "checkpoints/config.json"
+
+    # Whisper tiny (used for alignment)
+    - pget "https://huggingface.co/ByteDance/LatentSync-1.5/resolve/main/whisper/tiny.pt" "checkpoints/auxiliary/models/whisper/tiny.pt"
+
+    # SyncNet (some forks expect it; harmless if unused)
+    - pget "https://huggingface.co/ByteDance/LatentSync-1.5/resolve/main/stable_syncnet.pt" "checkpoints/auxiliary/models/syncnet/stable_syncnet.pt"
+    # also place a convenience copy where some scripts look for it:
+    - ln -sf auxiliary/models/syncnet/stable_syncnet.pt checkpoints/stable_syncnet.pt
+
+    # Preload insightface "buffalo_l" so FaceAnalysis doesn't download at runtime
+    - pget "https://github.com/deepinsight/insightface/releases/download/v0.7/buffalo_l.zip" "/tmp/buffalo_l.zip"
+    - unzip -o /tmp/buffalo_l.zip -d "checkpoints/auxiliary/models/buffalo_l"
+
+    # (Optional) quiet the onnxruntime thread-affinity spam; safe to skip
+    - echo 'export ORT_DISABLE_THREAD_AFFINITY=1' >> /etc/profile
+
+    # quick sanity check so builds fail fast if any file is missing
+    - python - <<'PY'
+import os
+required = [
+  "checkpoints/latentsync_unet.pt",
+  "checkpoints/config.json",
+  "checkpoints/auxiliary/models/whisper/tiny.pt",
+  "checkpoints/auxiliary/models/syncnet/stable_syncnet.pt",
+  "checkpoints/auxiliary/models/buffalo_l/det_10g.onnx",
+  "checkpoints/auxiliary/models/buffalo_l/2d106det.onnx",
+  "checkpoints/auxiliary/models/buffalo_l/w600k_r50.onnx",
+]
+missing = [p for p in required if not os.path.exists(p)]
+assert not missing, f"Missing required assets: {missing}"
+print("LatentSync-1.5 assets present.")
+PY
 
 # predict.py defines how predictions are run on your model
 predict: "predict.py:Predictor"
