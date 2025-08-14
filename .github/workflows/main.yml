@@ -1,11 +1,13 @@
 name: Push to Replicate
 
 on:
-  workflow_dispatch:
-    inputs:
-      model_name:
-        description: 'owner/model-name (e.g., openmicedu/latentsync)'
-        required: true
+  push:
+    branches: [ replicate-cog ]   # run on any commit to this branch
+  workflow_dispatch: {}            # optional: manual "Run workflow" button
+
+concurrency:
+  group: cog-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   push_to_replicate:
