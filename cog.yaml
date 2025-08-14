@@ -10,12 +10,12 @@ build:
   python_requirements: requirements.txt
   run:
     - curl -L -o /usr/local/bin/pget "https://github.com/replicate/pget/releases/download/v0.10.2/pget_linux_x86_64" && chmod +x /usr/local/bin/pget
-    - mkdir -p checkpoints/auxiliary/models checkpoints/auxiliary/models/whisper checkpoints/auxiliary/models/syncnet
+    - mkdir -p checkpoints/whisper checkpoints/auxiliary/models
     - pget "https://huggingface.co/ByteDance/LatentSync-1.5/resolve/main/latentsync_unet.pt" checkpoints/latentsync_unet.pt
+    - pget "https://huggingface.co/ByteDance/LatentSync-1.5/resolve/main/latentsync_syncnet.pt" checkpoints/latentsync_syncnet.pt
     - pget "https://huggingface.co/ByteDance/LatentSync-1.5/resolve/main/config.json" checkpoints/config.json
-    - pget "https://huggingface.co/ByteDance/LatentSync-1.5/resolve/main/whisper/tiny.pt" checkpoints/auxiliary/models/whisper/tiny.pt
-    - pget "https://huggingface.co/ByteDance/LatentSync-1.5/resolve/main/stable_syncnet.pt" checkpoints/auxiliary/models/syncnet/stable_syncnet.pt
-    - ln -sf checkpoints/auxiliary/models/syncnet/stable_syncnet.pt checkpoints/latentsync_syncnet.pt
-    - pget "https://github.com/deepinsight/insightface/releases/downloa
+    - pget "https://huggingface.co/ByteDance/LatentSync-1.5/resolve/main/whisper/tiny.pt" checkpoints/whisper/tiny.pt
+    - pget "https://github.com/deepinsight/insightface/releases/download/v0.7/buffalo_l.zip" /tmp/buffalo_l.zip
+    - unzip -o /tmp/buffalo_l.zip -d checkpoints/auxiliary/models
 
 predict: "predict.py:Predictor"
