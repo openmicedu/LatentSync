@@ -4,8 +4,6 @@ build:
   system_packages:
     - ffmpeg
     - libgl1
-    - libglib2.0-0
-    - unzip
   python_version: "3.10.13"
   python_requirements: requirements.txt
   
